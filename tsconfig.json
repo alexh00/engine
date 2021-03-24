@@ -1,0 +1,19 @@
+﻿{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "esnext",
+        "target": "es5",
+        "lib": ["dom", "ES2015", "ES2016", "ES2017", "es2018"],
+        "strict": false,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "sourceMap": true,
+        "stripInternal": true,
+        "outDir": "./dist/lib",
+        "resolveJsonModule": true,
+        "importHelpers": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["./src", "builder/entry.ts", "main.ts"],
+    "compileOnSave": false
+}
