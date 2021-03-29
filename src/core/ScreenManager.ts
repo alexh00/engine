@@ -1,6 +1,5 @@
 import { Screen } from "./Screen";
 import { ISize } from "./Settings";
-import * as PIXI from 'pixi.js'
 
 export class ScreenManager {
 

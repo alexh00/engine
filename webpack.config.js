@@ -14,6 +14,9 @@ module.exports = {
         }
     ]
     },
+    externals: {
+        'pixi.js': 'PIXI'
+    },
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ]
     },

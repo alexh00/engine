@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
-//this could be a singleton
+/// <reference path="typings/pixi.js.d.ts" />
 class Engine {
 
     public app: PIXI.Application;

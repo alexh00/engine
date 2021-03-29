@@ -1,6 +1,5 @@
 import { Timeout } from "../utils/Timeout";
 import { UpdateList } from "../utils/UpdateList";
-import * as PIXI from 'pixi.js'
 
 export class Screen extends PIXI.Container {
 

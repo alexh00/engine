@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js'
 //interface for the config
 
 export interface IAsset {

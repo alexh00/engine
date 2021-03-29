@@ -14,6 +14,6 @@
         "importHelpers": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": ["./src", "builder/entry.ts", "main.ts"],
+    "include": ["./src", "Engine.ts"],
     "compileOnSave": false
 }
