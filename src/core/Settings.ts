@@ -1,9 +1,14 @@
-
+import * as PIXI from 'pixi.js'
 //interface for the config
 
 export interface IAsset {
     id: string;
     src: string;
+}
+
+export interface ISize {
+    width: number;
+    height: number;
 }
 
 export interface IAssets {
@@ -15,6 +20,7 @@ export interface IAssets {
 
 export interface IConfig {
     assets: IAssets;
+    size: ISize;
 }
 
 export class Settings implements IConfig {
@@ -24,6 +30,7 @@ export class Settings implements IConfig {
     public configPath: string = 'json/config.json'
 
     public assets: IAssets;
+    public size: ISize = {width: 1334, height: 750};
 
     constructor(private _loader: PIXI.Loader, private _events: PIXI.utils.EventEmitter) {
         this.load();

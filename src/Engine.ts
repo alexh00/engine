@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Loader } from './core/Loader';
+import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
 //this could be a singleton
 class Engine {
@@ -11,6 +12,8 @@ class Engine {
     public events: PIXI.utils.EventEmitter;
 
     public loader: Loader;
+
+    public screenManager: ScreenManager;
 
     public constructor() {
         
@@ -30,18 +33,29 @@ class Engine {
         return this.app.loader.resources[id].data;
     }
 
+    //config has now loaded
     private build(): void {
+        //update the app with the loaded settings
+        this.app.renderer.resize(this.settings.size.width, this.settings.size.height)
+
         //create the loader
         this.loader = new Loader(this.app.loader, this.events, this.settings)
 
         //create update loop
 
         //create screen manager
+        this.screenManager = this._createScreenManager();
 
         //create tween manager
 
         //create sound manager (rewrite it)
     }
+
+    private _createScreenManager(): ScreenManager {
+        const screenManager = new ScreenManager(this.events, this.settings.size)
+        this.app.stage.addChild(screenManager.root)
+        return screenManager;
+    }   
 
     private _createEvents(): PIXI.utils.EventEmitter {
         const events = new PIXI.utils.EventEmitter();
@@ -60,21 +74,14 @@ class Engine {
     }
 
     private _createPixiApp(): PIXI.Application {
-        // - only set resolution to 0.5 if screen width < 500
-        const resolution = 1;
-
-        //TODO - where to get the dimensions from?
-        const width = 1024;
-        const height = 768;
         const view = document.body.querySelector('canvas');
-
         return new PIXI.Application({
-            height, width,
+            height: 768, width: 1024,
             transparent: true,
             view,
             forceCanvas: false,
             antialias: true,
-            resolution, // get smoother text
+            resolution: 1
         });
     }
 
