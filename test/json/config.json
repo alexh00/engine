@@ -1,3 +1,10 @@
 {
-    "value": "fred"
+  "assets": {
+    "global": [
+      {"id": "snoopy", "src": "img/snoopy.jpg"},
+      {"id": "cn", "src": "img/cn.jpg"},
+      {"id": "cn2", "src": "img/cn2.jpg"}
+    ],
+    "scene": {"scene-id": [{"stuff": "goes here"}]}
+  }
 }

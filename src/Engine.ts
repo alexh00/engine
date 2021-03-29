@@ -1,10 +1,16 @@
 import * as PIXI from 'pixi.js'
+import { Loader } from './Loader';
+import { Settings } from './Settings'
 //this could be a singleton
 class Engine {
 
-    public configPath: string = 'json/config.json'
-
     public app: PIXI.Application;
+
+    public settings: Settings;
+
+    public events: PIXI.utils.EventEmitter;
+
+    public loader: Loader;
 
     public constructor() {
         
@@ -14,18 +20,43 @@ class Engine {
         //probably want to use the pixi loader for everything...
         //so create the app straight away
         this.app = this._createPixiApp()
+
+        this.events = this._createEvents();
         //load the config
-        this._loadConfig();
+        this.settings = new Settings(this.app.loader, this.events);
     }
 
-    private _loadConfig() {
-        const loader = this.app.loader;
-        loader.add('config', this.configPath);
-        loader.onComplete.once(() => {
-            //TODO - parse into settings
-            console.log('config loaded', this.getResource('config'))
+    public getResource(id: string): unknown {
+        return this.app.loader.resources[id].data;
+    }
+
+    private build(): void {
+        //create the loader
+        this.loader = new Loader(this.app.loader, this.events, this.settings)
+
+        //create update loop
+
+        //create screen manager
+
+        //create tween manager
+
+        //create sound manager (rewrite it)
+    }
+
+    private _createEvents(): PIXI.utils.EventEmitter {
+        const events = new PIXI.utils.EventEmitter();
+
+        events.on(Settings.CONFIG_LOADED, () => {
+            //config is loaded - now build the engine
+            this.build();
+            //load global assets
+            this.loader.loadGlobal();
         })
-        loader.load();
+
+        events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
+            //now show first screen
+        })
+        return events;
     }
 
     private _createPixiApp(): PIXI.Application {
@@ -47,11 +78,8 @@ class Engine {
         });
     }
 
-    public getResource(id: string): unknown {
-        return this.app.loader.resources[id].data;
-    }
 }
-
+//kick start
 document.addEventListener('DOMContentLoaded', (event) => {
     new Engine().start();
 });
