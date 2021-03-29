@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
-import { Loader } from './Loader';
-import { Settings } from './Settings'
+import { Loader } from './core/Loader';
+import { Settings } from './core/Settings'
 //this could be a singleton
 class Engine {
 
