@@ -21,7 +21,7 @@ module.exports = {
         extensions: [ '.tsx', '.ts', '.js' ]
     },
     output: {
-        filename: 'main.js',
+        filename: 'engine.js',
         path: distPath
     },
     devServer: {

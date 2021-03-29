@@ -2,7 +2,7 @@
     "name": "Engine",
     "version": "0.0.0",
     "description": "A Typescript based engine for working with pixi.js",
-    "main": "index.js",
+    "main": "engine.js",
     "repository": {
         "type": "git",
         "url": ""
