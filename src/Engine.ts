@@ -3,7 +3,7 @@ import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
 /// <reference path="typings/pixi.js.d.ts" />
-class Engine {
+export class Engine {
 
     public app: PIXI.Application;
 
@@ -19,7 +19,7 @@ class Engine {
         
     }
 
-    public start(): void {
+    public start(): Engine {
         //probably want to use the pixi loader for everything...
         //so create the app straight away
         this.app = this._createPixiApp()
@@ -27,6 +27,7 @@ class Engine {
         this.events = this._createEvents();
         //load the config
         this.settings = new Settings(this.app.loader, this.events);
+        return this;
     }
 
     public getResource(id: string): unknown {
@@ -69,6 +70,7 @@ class Engine {
 
         events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
             //now show first screen
+            events.emit('app-ready')
         })
         return events;
     }
@@ -86,7 +88,11 @@ class Engine {
     }
 
 }
+
+//this hack is horrid - need to find out how to do this properly
+window['engine'] = Engine;
+
 //kick start
-document.addEventListener('DOMContentLoaded', (event) => {
-    new Engine().start();
-});
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     window['engine'] = new Engine().start();
+// });
