@@ -1,5 +1,6 @@
 const path = require('path');
 const distPath = path.resolve(__dirname, 'bin');
+const DtsBundleWebpack = require('dts-bundle-webpack')
 
 module.exports = {
     entry: './src/Engine.ts',
@@ -14,6 +15,13 @@ module.exports = {
         }
     ]
     },
+    plugins: [
+        new DtsBundleWebpack({
+            name: 'engine',
+            main: 'dist/lib/Engine.d.ts',
+            out: '../../typings/engine.d.ts'
+        })
+    ],
     externals: {
         'pixi.js': 'PIXI'
     },
