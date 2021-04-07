@@ -19,7 +19,7 @@ module.exports = {
         new DtsBundleWebpack({
             name: 'engine',
             main: 'dist/lib/Engine.d.ts',
-            out: '../../typings/engine.d.ts'
+            out: '../../bin/engine.d.ts'
         })
     ],
     externals: {
