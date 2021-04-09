@@ -89,10 +89,5 @@ export class Engine {
 
 }
 
-//this hack is horrid - need to find out how to do this properly
-window['engine'] = Engine;
-
-//kick start
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     window['engine'] = new Engine().start();
-// });
+export * from './core'
+export * from './utils'

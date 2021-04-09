@@ -1,13 +1,22 @@
 import { Timeout } from "../utils/Timeout";
 import { UpdateList } from "../utils/UpdateList";
 
+export interface IScreenConfig {
+    screenWidth: number,
+    screenHeight: number
+}
+
 export class Screen extends PIXI.Container {
 
     public updateList: UpdateList;
     public timeout: Timeout;
 
-    constructor() {
+    protected screenWidth:number;
+    protected screenHeight: number;
+
+    constructor(config: IScreenConfig) {
         super();
+        Object.assign(this, config)
 
         this.updateList = new UpdateList();
         this.timeout = <Timeout>this.updateList.add(new Timeout());

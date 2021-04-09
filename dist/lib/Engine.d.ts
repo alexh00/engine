@@ -16,3 +16,5 @@ export declare class Engine {
     private _createEvents;
     private _createPixiApp;
 }
+export * from './core';
+export * from './utils';

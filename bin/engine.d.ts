@@ -17,6 +17,8 @@ declare module 'engine' {
         start(): Engine;
         getResource(id: string): unknown;
     }
+    export * from 'engine/core';
+    export * from 'engine/utils';
 }
 
 declare module 'engine/core/Loader' {
@@ -37,7 +39,6 @@ declare module 'engine/core/ScreenManager' {
         root: PIXI.Container;
         currentScreen: Screen;
         constructor(_events: PIXI.utils.EventEmitter, _size: ISize);
-        test(): void;
         showScreen: (ScreenType: any) => void;
         resize(): void;
         disposeScreen(): void;
@@ -73,13 +74,31 @@ declare module 'engine/core/Settings' {
     }
 }
 
+declare module 'engine/core' {
+    export * from 'engine/core/Loader';
+    export * from 'engine/core/Screen';
+    export * from 'engine/core/ScreenManager';
+    export * from 'engine/core/Settings';
+}
+
+declare module 'engine/utils' {
+    export * from 'engine/utils/Timeout';
+    export * from 'engine/utils/UpdateList';
+}
+
 declare module 'engine/core/Screen' {
     import { Timeout } from "engine/utils/Timeout";
     import { UpdateList } from "engine/utils/UpdateList";
+    export interface IScreenConfig {
+        screenWidth: number;
+        screenHeight: number;
+    }
     export class Screen extends PIXI.Container {
         updateList: UpdateList;
         timeout: Timeout;
-        constructor();
+        protected screenWidth: number;
+        protected screenHeight: number;
+        constructor(config: IScreenConfig);
         update(delta: number): void;
         dispose(): void;
     }
