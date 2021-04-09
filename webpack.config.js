@@ -30,7 +30,8 @@ module.exports = {
     },
     output: {
         filename: 'engine.js',
-        path: distPath
+        path: distPath,
+        library: 'engine'
     },
     devServer: {
         contentBase: distPath,
