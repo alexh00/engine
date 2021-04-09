@@ -1,6 +1,5 @@
 export interface IUpdate {
-    update: (delta: number) => void;
-    // [x: string]: any;
+    update: (delta: number) => void | boolean;
 }
 
 export class UpdateList {
