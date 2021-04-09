@@ -1,5 +1,5 @@
 export interface IUpdate {
-    update: (delta: number) => void;
+    update: (delta: number) => void | boolean;
 }
 export declare class UpdateList {
     updateItems: IUpdate[];

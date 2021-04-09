@@ -19,6 +19,7 @@ declare module 'engine' {
     }
     export * from 'engine/core';
     export * from 'engine/utils';
+    export * from 'engine/tween';
 }
 
 declare module 'engine/core/Loader' {
@@ -84,6 +85,13 @@ declare module 'engine/core' {
 declare module 'engine/utils' {
     export * from 'engine/utils/Timeout';
     export * from 'engine/utils/UpdateList';
+    export * from 'engine/utils/Sequence';
+}
+
+declare module 'engine/tween' {
+    export * from 'engine/tween/Easing';
+    export * from 'engine/tween/Tween';
+    export * from 'engine/tween/TweenManager';
 }
 
 declare module 'engine/core/Screen' {
@@ -123,7 +131,7 @@ declare module 'engine/utils/Timeout' {
 
 declare module 'engine/utils/UpdateList' {
     export interface IUpdate {
-        update: (delta: number) => void;
+        update: (delta: number) => void | boolean;
     }
     export class UpdateList {
         updateItems: IUpdate[];
@@ -136,6 +144,153 @@ declare module 'engine/utils/UpdateList' {
         remove(item: IUpdate): IUpdate;
         _remove(item: IUpdate): void;
         get length(): number;
+    }
+}
+
+declare module 'engine/utils/Sequence' {
+    export class Sequence {
+        list: unknown[];
+        constructor(stuff?: unknown[], randomise?: boolean);
+        add(stuff: unknown, randomise?: boolean): Sequence;
+        remove(stuff: unknown): Sequence;
+        randomise(): Sequence;
+        next(): unknown;
+        previous(): unknown;
+        get length(): number;
+        static randomiseList: (list: unknown[]) => unknown[];
+    }
+}
+
+declare module 'engine/tween/Easing' {
+    const Easing: {
+        Linear: {
+            None(k: any): any;
+        };
+        Quadratic: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Cubic: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Quartic: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Quintic: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Sinusoidal: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Exponential: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Circular: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Elastic: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Back: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+        Bounce: {
+            In(k: any): number;
+            Out(k: any): number;
+            InOut(k: any): number;
+        };
+    };
+    const Interpolation: {
+        Linear(v: any, k: any): any;
+        Bezier(v: any, k: any): number;
+        CatmullRom(v: any, k: any): any;
+        Utils: {
+            Linear(p0: any, p1: any, t: any): any;
+            Bernstein(n: any, i: any): number;
+            Factorial: (n: any) => number;
+            CatmullRom(p0: any, p1: any, p2: any, p3: any, t: any): any;
+        };
+    };
+    export { Easing, Interpolation };
+}
+
+declare module 'engine/tween/Tween' {
+    import { TweenManager } from 'engine/tween/TweenManager';
+    export class Tween {
+        tweenManager: TweenManager;
+        protected _object: unknown;
+        protected _valuesStart: object;
+        protected _valuesEnd: object;
+        protected _valuesStartRepeat: object;
+        protected _duration: number;
+        protected _repeat: number;
+        protected _yoyo: boolean;
+        protected _isPlaying: boolean;
+        protected _reversed: boolean;
+        protected _delayTime: number;
+        protected _startTime: number;
+        protected _easingFunction: (k: number) => number;
+        protected _interpolationFunction: (v: any, k: any) => any;
+        protected _chainedTweens: Tween[];
+        protected _onStartCallback: () => void;
+        protected _onStartCallbackFired: boolean;
+        protected _onUpdateCallback: () => void;
+        protected _onCompleteCallback: () => void;
+        protected _onStopCallback: () => void;
+        constructor(object: unknown);
+        update(time: number): boolean;
+        to(properties: object, duration: number): Tween;
+        from(properties: object, duration: number): Tween;
+        fromTo(from: object, to: object, duration: number): Tween;
+        isTweenOf(target: any): boolean;
+        start(time?: number): Tween;
+        stop(): Tween;
+        stopChainedTweens(): void;
+        delay(amount: number): Tween;
+        repeat(times: number): Tween;
+        yoyo(yoyo: boolean): Tween;
+        easing(easing: (k: number) => number): Tween;
+        interpolation(interpolation: any): Tween;
+        chain(...tweens: Tween[]): Tween;
+        onStart(callback: () => void): Tween;
+        onUpdate(callback: () => void): Tween;
+        onComplete(callback: () => void): Tween;
+        onStop(callback: () => void): Tween;
+        restart(pause_duration: number): void;
+        changeDuration(new_duration: number): void;
+    }
+}
+
+declare module 'engine/tween/TweenManager' {
+    import { UpdateList } from 'engine/utils/UpdateList';
+    import { Tween } from 'engine/tween/Tween';
+    export { Easing } from 'engine/tween/Easing';
+    export class TweenManager extends UpdateList {
+        passedTime: number;
+        constructor();
+        update(delta: number): void;
+        create(target: unknown): Tween;
+        static create(target: unknown, tweenManager?: TweenManager): Tween;
+        killTweensOf(target: unknown): void;
+        static killTweensOf(target: any): void;
+        static get instance(): TweenManager;
     }
 }
 

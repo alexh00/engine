@@ -18,3 +18,4 @@ export declare class Engine {
 }
 export * from './core';
 export * from './utils';
+export * from './tween';
