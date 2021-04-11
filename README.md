@@ -2,5 +2,6 @@
 A bare bones Typescript based engine for working with pixi.js
 
 # TODO:
-* add build counter
+* pull build version into the bundle
+* screen navigation to use queued event not immediate
 * add audio system
