@@ -7,10 +7,12 @@ declare module 'engine' {
     import { Loader } from 'engine/core/Loader';
     import { ScreenManager } from 'engine/core/ScreenManager';
     import { Settings } from 'engine/core/Settings';
+    import { EventQueue, UpdateLoop } from 'engine/utils';
     export class Engine {
         app: PIXI.Application;
         settings: Settings;
-        events: PIXI.utils.EventEmitter;
+        events: EventQueue;
+        updateLoop: UpdateLoop;
         loader: Loader;
         screenManager: ScreenManager;
         constructor();
@@ -40,6 +42,7 @@ declare module 'engine/core/ScreenManager' {
         root: PIXI.Container;
         currentScreen: Screen;
         constructor(_events: PIXI.utils.EventEmitter, _size: ISize);
+        update(delta: number): void;
         showScreen: (ScreenType: any) => void;
         resize(): void;
         disposeScreen(): void;
@@ -75,17 +78,19 @@ declare module 'engine/core/Settings' {
     }
 }
 
+declare module 'engine/utils' {
+    export * from 'engine/utils/Timeout';
+    export * from 'engine/utils/UpdateList';
+    export * from 'engine/utils/Sequence';
+    export * from 'engine/utils/EventQueue';
+    export * from 'engine/utils/UpdateLoop';
+}
+
 declare module 'engine/core' {
     export * from 'engine/core/Loader';
     export * from 'engine/core/Screen';
     export * from 'engine/core/ScreenManager';
     export * from 'engine/core/Settings';
-}
-
-declare module 'engine/utils' {
-    export * from 'engine/utils/Timeout';
-    export * from 'engine/utils/UpdateList';
-    export * from 'engine/utils/Sequence';
 }
 
 declare module 'engine/tween' {
@@ -158,6 +163,25 @@ declare module 'engine/utils/Sequence' {
         previous(): unknown;
         get length(): number;
         static randomiseList: (list: unknown[]) => unknown[];
+    }
+}
+
+declare module 'engine/utils/EventQueue' {
+    export class EventQueue extends PIXI.utils.EventEmitter {
+        add(eventId: string, ...args: unknown[]): void;
+        update(_delta: number): void;
+    }
+}
+
+declare module 'engine/utils/UpdateLoop' {
+    import { EventQueue } from "engine/utils/EventQueue";
+    import { UpdateList } from "engine/utils/UpdateList";
+    export class UpdateLoop extends UpdateList {
+        fps: number;
+        constructor(_eventQueue: EventQueue);
+        start(): UpdateLoop;
+        stop(): void;
+        update(_delta: number): void;
     }
 }
 

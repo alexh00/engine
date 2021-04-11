@@ -15,18 +15,15 @@ export class ScreenManager {
             this._size.height / 2
         )
 
+        //TODO - make this work via queued events actually
         this._events.on('screen', this.showScreen)
     }
 
-    // public test(): void {
-    //     this.showScreen(Screen);
-    //     //test by adding a sprite
-    //     const sprite = new PIXI.Sprite(PIXI.utils.TextureCache['snoopy'])
-    //     sprite.anchor.set(0.5);
-    //     sprite.width = this._size.width;
-    //     sprite.height = this._size.height;
-    //     this.currentScreen.addChild(sprite)
-    // }
+    public update(delta: number): void {
+        if (this.currentScreen) {
+            this.currentScreen.update(delta);
+        }
+    }
 
     public showScreen = (ScreenType): void => {
         this.disposeScreen();

@@ -6,6 +6,7 @@ export declare class ScreenManager {
     root: PIXI.Container;
     currentScreen: Screen;
     constructor(_events: PIXI.utils.EventEmitter, _size: ISize);
+    update(delta: number): void;
     showScreen: (ScreenType: any) => void;
     private _createScreen;
     resize(): void;

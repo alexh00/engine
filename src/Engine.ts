@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js'
 import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
+import { TweenManager } from './tween';
+import { EventQueue, UpdateLoop } from './utils';
 /// <reference path="typings/pixi.js.d.ts" />
 export class Engine {
 
@@ -9,7 +11,9 @@ export class Engine {
 
     public settings: Settings;
 
-    public events: PIXI.utils.EventEmitter;
+    public events: EventQueue;
+
+    public updateLoop: UpdateLoop;
 
     public loader: Loader;
 
@@ -43,23 +47,32 @@ export class Engine {
         this.loader = new Loader(this.app.loader, this.events, this.settings)
 
         //create update loop
+        this.updateLoop = this._createUpdateLoop()
+
+        //create tween manager, add to update loop
+        this.updateLoop.add(TweenManager.instance);
 
         //create screen manager
         this.screenManager = this._createScreenManager();
 
-        //create tween manager
-
         //create sound manager (rewrite it)
+    }
+
+    private _createUpdateLoop(): UpdateLoop {
+        const updateLoop = new UpdateLoop(this.events)
+        updateLoop.start();
+        return updateLoop;
     }
 
     private _createScreenManager(): ScreenManager {
         const screenManager = new ScreenManager(this.events, this.settings.size)
         this.app.stage.addChild(screenManager.root)
+        this.updateLoop.add(screenManager)
         return screenManager;
     }   
 
-    private _createEvents(): PIXI.utils.EventEmitter {
-        const events = new PIXI.utils.EventEmitter();
+    private _createEvents(): EventQueue {
+        const events = new EventQueue();
 
         events.on(Settings.CONFIG_LOADED, () => {
             //config is loaded - now build the engine
