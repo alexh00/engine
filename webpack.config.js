@@ -18,8 +18,8 @@ module.exports = {
     plugins: [
         new DtsBundleWebpack({
             name: 'engine',
-            main: 'dist/lib/Engine.d.ts',
-            out: '../../bin/engine.d.ts'
+            main: './defs/Engine.d.ts',
+            out: '../bin/engine.d.ts'
         })
     ],
     externals: {

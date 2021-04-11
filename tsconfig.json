@@ -10,7 +10,7 @@
         "forceConsistentCasingInFileNames": true,
         "sourceMap": true,
         "stripInternal": true,
-        "outDir": "./dist/lib",
+        "outDir": "./defs",
         "resolveJsonModule": true,
         "importHelpers": true,
         "allowSyntheticDefaultImports": true
