@@ -3,7 +3,6 @@ const fs = require('fs')
 const distPath = path.resolve(__dirname, 'bin');
 const DtsBundleWebpack = require('dts-bundle-webpack')
 
-
 function getVersion() {
     return JSON.parse(fs.readFileSync('./package.json')).version;
 }
@@ -13,6 +12,9 @@ function setVersion(version) {
     const pkg = JSON.parse(fs.readFileSync(p));
     pkg.version = version;
     fs.writeFileSync(p, JSON.stringify(pkg, null, 2))
+    const s = `const version = { code: '${version}' }
+    export {version}`;
+    fs.writeFileSync('./src/core/version.ts', s, 'utf-8');
     return version;
 }
   

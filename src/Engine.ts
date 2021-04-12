@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
+import { version } from './core/version';
 import { TweenManager } from './tween';
 import { EventQueue, UpdateLoop } from './utils';
 /// <reference path="typings/pixi.js.d.ts" />
@@ -20,7 +21,7 @@ export class Engine {
     public screenManager: ScreenManager;
 
     public constructor() {
-        
+        console.log('Engine version', version.code)
     }
 
     public start(): Engine {

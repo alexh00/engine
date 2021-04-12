@@ -91,6 +91,7 @@ declare module 'engine/core' {
     export * from 'engine/core/Screen';
     export * from 'engine/core/ScreenManager';
     export * from 'engine/core/Settings';
+    export * from 'engine/core/version';
 }
 
 declare module 'engine/tween' {
@@ -183,6 +184,13 @@ declare module 'engine/utils/UpdateLoop' {
         stop(): void;
         update(_delta: number): void;
     }
+}
+
+declare module 'engine/core/version' {
+    const version: {
+        code: string;
+    };
+    export { version };
 }
 
 declare module 'engine/tween/Easing' {
