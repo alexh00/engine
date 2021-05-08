@@ -1,6 +1,7 @@
 
 
 import { IAsset, IAssets, Settings } from "./Settings";
+import { LoaderResource } from 'pixi.js'
 //asset loader
 export class Loader {
 
@@ -12,7 +13,13 @@ export class Loader {
         private _events: PIXI.utils.EventEmitter,
         private _settings: Settings
     ) {
+        this._setResourceTypes();
+    }
 
+    private _setResourceTypes(): void {
+        //set it to use xhr for sounds
+        LoaderResource.setExtensionLoadType('ogg', LoaderResource.LOAD_TYPE.XHR)
+        LoaderResource.setExtensionLoadType('m4a', LoaderResource.LOAD_TYPE.XHR)
     }
 
     public loadGlobal(): void {
@@ -25,6 +32,7 @@ export class Loader {
     }
 
     public loadAssets(assets: IAsset[], load = true): void {
+        //TODO - handle setting audio type here
         assets.forEach(asset => {
             this._loader.add(asset.id, asset.src)
         })

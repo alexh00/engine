@@ -59,9 +59,11 @@ export class Sound {
         //TODO
     }
 
-    public add(id: string): void {
-        //need to add the buffer and any relevant info
-    }
+    //this is useless, cant control playback
+    // public add(id: string, element: HTMLAudioElement): void {
+    //     //need to add the buffer and any relevant info
+    //     const source: MediaElementAudioSourceNode = this.context.createMediaElementSource(element);
+    // }
 
     //singleton
     private static _instance: Sound
