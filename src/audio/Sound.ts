@@ -68,6 +68,8 @@ export class Sound {
         const soundPlay = new SoundPlay(soundData, this.context)
         //for now just connect it to the sfx gain
         soundPlay.output.connect(this.sfxGain)
+        //play it
+        soundPlay.play();
     }
 
     public stop(id: string): void {
