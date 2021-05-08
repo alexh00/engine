@@ -10,6 +10,7 @@ export declare class Loader {
     private _events;
     private _settings;
     static GLOBAL_ASSETS_LOADED: string;
+    private _supportedTypes;
     constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
     private _setResourceTypes;
     private setXhr;

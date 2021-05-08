@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import { Sound } from './audio/Sound';
 import { ISoundData, Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
@@ -83,8 +84,7 @@ export class Engine {
         })
 
         events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
-            const sounds: ISoundData[] = this.loader.fetchSounds();
-            console.log(sounds)
+            Sound.instance.addSounds(this.loader.fetchSounds())
             //now show first screen
             events.emit('app-ready')
         })

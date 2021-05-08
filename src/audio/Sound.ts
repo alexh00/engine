@@ -1,3 +1,4 @@
+import { ISoundData } from "../core";
 
 interface ISoundInfo {
     id: string;
@@ -57,6 +58,10 @@ export class Sound {
 
     public stop(id: string): void {
         //TODO
+    }
+
+    public addSounds(sounds: ISoundData[]): void {
+        console.log(sounds)
     }
 
     //this is useless, cant control playback

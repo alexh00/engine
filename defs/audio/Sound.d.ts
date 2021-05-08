@@ -1,3 +1,4 @@
+import { ISoundData } from "../core";
 export declare class Sound {
     private context;
     private globalGain;
@@ -11,6 +12,7 @@ export declare class Sound {
     private addGain;
     play(id: string, volume?: number, loop?: number): void;
     stop(id: string): void;
+    addSounds(sounds: ISoundData[]): void;
     private static _instance;
     static get instance(): Sound;
 }

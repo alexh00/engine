@@ -15,6 +15,7 @@ export class Loader {
 
     public static GLOBAL_ASSETS_LOADED: string = 'global-assets-loaded';
 
+    private _supportedTypes = ['ogg', 'm4a', 'mp3']
 
     constructor(
         private _loader: PIXI.Loader,
@@ -26,9 +27,7 @@ export class Loader {
 
     private _setResourceTypes(): void {
         //set it to use xhr for sounds
-        this.setXhr('ogg')
-        this.setXhr('m4a')
-        this.setXhr('mp3')
+        this._supportedTypes.forEach(type => this.setXhr(type))
     }
 
     private setXhr(extension: string): void {
@@ -49,7 +48,7 @@ export class Loader {
         const resources = this._loader.resources;
         return Object.keys(resources).filter((id: string) => {
             const resource = resources[id];
-            return !!resource.xhr
+            return !!resource.xhr && this._supportedTypes.includes(resource.extension)
         }).map((id: string) => {
             const resource = resources[id];
             return {
