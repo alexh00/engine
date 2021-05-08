@@ -7,6 +7,7 @@ export declare class Loader {
     constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
     private _setResourceTypes;
     loadGlobal(): void;
+    fetchSounds(): void;
     loadAssets(assets: IAsset[], load?: boolean): void;
     loadScreen(screenId: string): void;
 }

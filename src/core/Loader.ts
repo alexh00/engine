@@ -31,6 +31,17 @@ export class Loader {
         })
     }
 
+    public fetchSounds() {
+        const resources = this._loader.resources;
+        Object.keys(resources).forEach((id: string) => {
+            const data = resources[id];
+            console.log(id, data)
+            if (data.type === LoaderResource.TYPE.AUDIO) {
+                console.log('its audio')
+            }
+        })
+    }
+
     public loadAssets(assets: IAsset[], load = true): void {
         //TODO - handle setting audio type here
         assets.forEach(asset => {
