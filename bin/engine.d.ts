@@ -26,11 +26,17 @@ declare module 'engine' {
 
 declare module 'engine/core/Loader' {
     import { IAsset, Settings } from "engine/core/Settings";
+    export interface ISoundData {
+        id: string;
+        buffer: ArrayBuffer;
+        url?: string;
+        extension?: string;
+    }
     export class Loader {
         static GLOBAL_ASSETS_LOADED: string;
         constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
         loadGlobal(): void;
-        fetchSounds(): void;
+        fetchSounds(): ISoundData[];
         loadAssets(assets: IAsset[], load?: boolean): void;
         loadScreen(screenId: string): void;
     }

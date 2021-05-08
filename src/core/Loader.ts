@@ -2,6 +2,14 @@
 
 import { IAsset, IAssets, Settings } from "./Settings";
 import { LoaderResource } from 'pixi.js'
+
+export interface ISoundData {
+    id: string;
+    buffer: ArrayBuffer;
+    url?: string;
+    extension?: string;
+}
+
 //asset loader
 export class Loader {
 
@@ -18,8 +26,14 @@ export class Loader {
 
     private _setResourceTypes(): void {
         //set it to use xhr for sounds
-        LoaderResource.setExtensionLoadType('ogg', LoaderResource.LOAD_TYPE.XHR)
-        LoaderResource.setExtensionLoadType('m4a', LoaderResource.LOAD_TYPE.XHR)
+        this.setXhr('ogg')
+        this.setXhr('m4a')
+        this.setXhr('mp3')
+    }
+
+    private setXhr(extension: string): void {
+        LoaderResource.setExtensionLoadType(extension, LoaderResource.LOAD_TYPE.XHR)
+        LoaderResource.setExtensionXhrType(extension, LoaderResource.XHR_RESPONSE_TYPE.BUFFER)
     }
 
     public loadGlobal(): void {
@@ -31,13 +45,15 @@ export class Loader {
         })
     }
 
-    public fetchSounds() {
+    public fetchSounds(): ISoundData[] {
         const resources = this._loader.resources;
-        Object.keys(resources).forEach((id: string) => {
-            const data = resources[id];
-            console.log(id, data)
-            if (data.type === LoaderResource.TYPE.AUDIO) {
-                console.log('its audio')
+        return Object.keys(resources).filter((id: string) => {
+            const resource = resources[id];
+            return !!resource.xhr
+        }).map((id: string) => {
+            const resource = resources[id];
+            return {
+                id, buffer: resource.data, extension: resource.extension, url: resource.url
             }
         })
     }
