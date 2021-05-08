@@ -22,6 +22,7 @@ declare module 'engine' {
     export * from 'engine/core';
     export * from 'engine/utils';
     export * from 'engine/tween';
+    export * from 'engine/audio';
 }
 
 declare module 'engine/core/Loader' {
@@ -100,6 +101,10 @@ declare module 'engine/tween' {
     export * from 'engine/tween/Easing';
     export * from 'engine/tween/Tween';
     export * from 'engine/tween/TweenManager';
+}
+
+declare module 'engine/audio' {
+    export * from 'engine/audio/Sound';
 }
 
 declare module 'engine/audio/Sound' {
