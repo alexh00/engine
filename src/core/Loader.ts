@@ -2,13 +2,7 @@
 
 import { IAsset, IAssets, Settings } from "./Settings";
 import { LoaderResource } from 'pixi.js'
-
-export interface ISoundData {
-    id: string;
-    buffer: ArrayBuffer;
-    url?: string;
-    extension?: string;
-}
+import { ISoundData } from "../audio/Sound";
 
 //asset loader
 export class Loader {
@@ -51,6 +45,8 @@ export class Loader {
             return !!resource.xhr && this._supportedTypes.includes(resource.extension)
         }).map((id: string) => {
             const resource = resources[id];
+            //TODO - what about sound group? loop? 
+            //also sound sprites...
             return {
                 id, buffer: resource.data, extension: resource.extension, url: resource.url
             }
@@ -58,8 +54,9 @@ export class Loader {
     }
 
     public loadAssets(assets: IAsset[], load = true): void {
-        //TODO - handle setting audio type here
+        //TODO - handle setting audio extension here
         assets.forEach(asset => {
+            //TODO - pass through more information eg sound groups
             this._loader.add(asset.id, asset.src)
         })
         if (load) {

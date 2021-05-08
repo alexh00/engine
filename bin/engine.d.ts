@@ -26,12 +26,7 @@ declare module 'engine' {
 
 declare module 'engine/core/Loader' {
     import { IAsset, Settings } from "engine/core/Settings";
-    export interface ISoundData {
-        id: string;
-        buffer: ArrayBuffer;
-        url?: string;
-        extension?: string;
-    }
+    import { ISoundData } from "engine/audio/Sound";
     export class Loader {
         static GLOBAL_ASSETS_LOADED: string;
         constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
@@ -105,6 +100,36 @@ declare module 'engine/tween' {
     export * from 'engine/tween/Easing';
     export * from 'engine/tween/Tween';
     export * from 'engine/tween/TweenManager';
+}
+
+declare module 'engine/audio/Sound' {
+    export interface ISoundData {
+        id: string;
+        buffer: ArrayBuffer | AudioBuffer;
+        loop?: number;
+        group?: string;
+        url?: string;
+        extension?: string;
+    }
+    export interface IBuffers {
+        [id: string]: ISoundData;
+    }
+    export class Sound {
+        constructor();
+        play(id: string, volume?: number, loop?: number): void;
+        stop(id: string): void;
+        addSounds(sounds: ISoundData[]): void;
+        add: (sound: ISoundData) => void;
+        static get instance(): Sound;
+    }
+    export class SoundPlay {
+        soundData: ISoundData;
+        source: AudioBufferSourceNode;
+        output: GainNode;
+        constructor(soundData: ISoundData, context: AudioContext);
+        play(): void;
+        dispose(): void;
+    }
 }
 
 declare module 'engine/core/Screen' {

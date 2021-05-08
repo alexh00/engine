@@ -1,10 +1,5 @@
 import { IAsset, Settings } from "./Settings";
-export interface ISoundData {
-    id: string;
-    buffer: ArrayBuffer;
-    url?: string;
-    extension?: string;
-}
+import { ISoundData } from "../audio/Sound";
 export declare class Loader {
     private _loader;
     private _events;

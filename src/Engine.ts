@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Sound } from './audio/Sound';
-import { ISoundData, Loader } from './core/Loader';
+import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
 import { version } from './core/version';
