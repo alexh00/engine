@@ -83,6 +83,7 @@ export class Engine {
         })
 
         events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
+            this.loader.fetchSounds();
             //now show first screen
             events.emit('app-ready')
         })
