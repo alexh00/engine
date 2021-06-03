@@ -110,6 +110,7 @@ export class SoundPlay {
         this.source.buffer = <AudioBuffer>this.soundData.buffer;
         //volume controller
         this.output = this.context.createGain();
+        this.source.connect(this.output);//this step is important ;)
     }
 
     public play(): void {
