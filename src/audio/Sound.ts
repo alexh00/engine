@@ -64,7 +64,6 @@ export class Sound {
 
     public play(id: string, volume: number = 1, loop: number = -1):void {
         const soundData = this._buffers[id];
-        // const buffer = soundData.buffer;
         const soundPlay = new SoundPlay(soundData, this.context)
         //for now just connect it to the sfx gain
         soundPlay.output.connect(this.sfxGain)
@@ -88,6 +87,10 @@ export class Sound {
         })
     }
 
+    public get scratchBuffer(): AudioBuffer {
+        return this._scratchBuffer;
+    }
+
     //singleton
     private static _instance: Sound
     public static get instance(): Sound {
@@ -104,6 +107,8 @@ export class SoundPlay {
     public source: AudioBufferSourceNode;
     public output: GainNode;
 
+    private startTime: number = 0;//for pause handling
+
     constructor(public soundData: ISoundData, private context: AudioContext) {
         // - create an audiobuffersource node
         this.source = this.context.createBufferSource();
@@ -118,7 +123,38 @@ export class SoundPlay {
         this.source.start()
     }
 
+    public stop(): void {
+        if (this.source) {
+            this.dispose();
+        }
+    }
+
+    public get volume(): number {
+        return this.output.gain.value
+    }
+
+    public set volume(value: number) {
+        this.output.gain.setValueAtTime(value, this.context.currentTime);
+    }
+
+    public get time(): number {
+        if (this.source) {
+            this.context.currentTime - this.startTime;
+        }
+        return 0;
+    }
+
     public dispose(): void {
-        //TODO
+        this.source.stop(0);
+        this.source.disconnect(0)
+        this.output.disconnect(0)
+        //this has to be independently try catched as throws on platforms other than ios
+        try {
+            this.source.buffer = Sound.instance.scratchBuffer;
+        } catch (e) {
+            //console.log('scratch buffer error! ', e);
+        }
+        this.source = null;
+        this.output = null;
     }
 }
