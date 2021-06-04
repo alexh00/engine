@@ -3,6 +3,9 @@
 export interface IAsset {
     id: string;
     src: string;
+    audio?: boolean;//if true then it will tag on audio format extension
+    loop?: number;//for sounds
+    group?: string;//for sounds
 }
 
 export interface ISize {

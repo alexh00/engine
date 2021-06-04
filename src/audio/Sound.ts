@@ -7,6 +7,19 @@ export interface ISoundData {
     group?: string;
     url?: string;
     extension?: string;
+    sprites?: ISpriteInfo[];
+}
+
+export interface ISpriteData {
+    id: string;
+    src: string;
+    sprites: ISpriteInfo[];
+}
+
+export interface ISpriteInfo {
+    id: string;
+    start: number;
+    duration: number;
 }
 
 export interface IBuffers {
@@ -95,6 +108,7 @@ export class Sound {
     }
 
     public add = (sound: ISoundData): void => {
+        //TODO - does this handle sound sprites correctly?
         this._buffers[sound.id] = sound;
         this.context.decodeAudioData(<ArrayBuffer>sound.buffer).then((decoded:AudioBuffer) => {
             sound.buffer = decoded;
