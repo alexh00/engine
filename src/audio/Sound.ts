@@ -56,6 +56,7 @@ export class Sound {
             this._enabled = false;
             return this;
         }
+        this._enabled = true;
         //buffer to fix ios bugs
         this._scratchBuffer = this.context.createBuffer(1, 1, 22050)
         //
