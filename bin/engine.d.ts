@@ -121,6 +121,8 @@ declare module 'engine/audio/Sound' {
         url?: string;
         extension?: string;
         sprites?: ISpriteInfo[];
+        start?: number;
+        duration?: number;
     }
     export interface ISpriteData {
         id: string;
@@ -140,7 +142,7 @@ declare module 'engine/audio/Sound' {
         play(id: string, volume?: number, loop?: number): void;
         stop(id: string): void;
         addSounds(sounds: ISoundData[]): void;
-        add: (sound: ISoundData) => void;
+        add: (soundData: ISoundData) => void;
         get scratchBuffer(): AudioBuffer;
         static get instance(): Sound;
     }

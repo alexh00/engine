@@ -6,6 +6,8 @@ export interface ISoundData {
     url?: string;
     extension?: string;
     sprites?: ISpriteInfo[];
+    start?: number;
+    duration?: number;
 }
 export interface ISpriteData {
     id: string;
@@ -33,7 +35,8 @@ export declare class Sound {
     private getChannel;
     stop(id: string): void;
     addSounds(sounds: ISoundData[]): void;
-    add: (sound: ISoundData) => void;
+    add: (soundData: ISoundData) => void;
+    private _cloneData;
     get scratchBuffer(): AudioBuffer;
     private static _instance;
     static get instance(): Sound;

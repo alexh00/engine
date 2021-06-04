@@ -8,6 +8,8 @@ export interface ISoundData {
     url?: string;
     extension?: string;
     sprites?: ISpriteInfo[];
+    start?: number;
+    duration?: number;
 }
 
 export interface ISpriteData {
@@ -108,12 +110,29 @@ export class Sound {
         //TODO - monitor when decoding is completed
     }
 
-    public add = (sound: ISoundData): void => {
-        //TODO - does this handle sound sprites correctly?
-        this._buffers[sound.id] = sound;
-        this.context.decodeAudioData(<ArrayBuffer>sound.buffer).then((decoded:AudioBuffer) => {
-            sound.buffer = decoded;
+    public add = (soundData: ISoundData): void => {
+        this.context.decodeAudioData(<ArrayBuffer>soundData.buffer).then((decoded:AudioBuffer) => {
+            soundData.buffer = decoded;
+            // - handle sound sprites correctly
+            //need a different sound data for each one
+            if (soundData.sprites) {
+                soundData.sprites.forEach((info: ISpriteInfo) => {
+                    const data = this._cloneData(soundData)
+                    data.id = info.id;
+                    data.start = info.start;
+                    data.duration = info.duration;
+                    this._buffers[info.id] = data;
+                })
+            } else {
+                this._buffers[soundData.id] = soundData;
+            }
+            
         })
+    }
+
+    private _cloneData(soundData: ISoundData): ISoundData {
+        const { id, buffer, group, extension, url } = soundData;
+        return { id, buffer, group, extension, url }
     }
 
     public get scratchBuffer(): AudioBuffer {
