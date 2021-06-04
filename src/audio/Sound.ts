@@ -13,19 +13,24 @@ export interface IBuffers {
     [id: string]: ISoundData;
 }
 
+interface IChannels {
+    [id: string]: SoundChannel;
+}
+
 //a manager for playing web audio sounds
 export class Sound {
     private context: AudioContext;
 
-    private globalGain: GainNode;
-    private sfxGain: GainNode;
-    private musicGain: GainNode;
-    private envGain: GainNode;
+    private globalGain: SoundChannel;
+    
+    private channels: IChannels;//sfx, music, env
 
-    private _enabled = false;
+    private _enabled = false;//TODO - check for this
     private _scratchBuffer: AudioBuffer;
 
     private _buffers: IBuffers;
+
+    //TODO - have an internal event dispatcher
 
     //probably make this a singleton
     constructor() {
@@ -48,27 +53,36 @@ export class Sound {
 
     private _createRouting(): void {
         //main output > global mute > context mutes
-        this.globalGain = this.context.createGain();
-        this.globalGain.connect(this.context.destination)
+        this.globalGain = new SoundChannel(this.context, this.context.destination);
+        
         //create sfx, music and env
-        this.sfxGain = this.addGain();
-        this.musicGain = this.addGain();
-        this.envGain = this.addGain();
+        this.channels = {
+            sfx: new SoundChannel(this.context, this.globalGain.output),
+            music: new SoundChannel(this.context, this.globalGain.output),
+            env: new SoundChannel(this.context, this.globalGain.output)
+        }
     }
 
-    private addGain(): GainNode {
-        const gain = this.context.createGain();
-        gain.connect(this.globalGain)
-        return gain;
+    public play(id: string, volume: number = 1, loop: number = -1): void {
+        if (this._enabled) {
+            const soundData: ISoundData = this._buffers[id];
+            const soundPlay = new SoundPlay(soundData, this.context)
+            //choose channel according to data -> ISoundData.group
+            const channel: SoundChannel = this.getChannel(soundData)
+            channel.add(soundPlay)
+            //play it
+            soundPlay.play();
+            //TODO - need to store the sound so it can be stopped if needed
+        }
+        
     }
 
-    public play(id: string, volume: number = 1, loop: number = -1):void {
-        const soundData = this._buffers[id];
-        const soundPlay = new SoundPlay(soundData, this.context)
-        //for now just connect it to the sfx gain
-        soundPlay.output.connect(this.sfxGain)
-        //play it
-        soundPlay.play();
+    private getChannel(soundData: ISoundData): SoundChannel {
+        switch (soundData.group) {
+            case 'music': return this.channels.music;
+            case 'env': return this.channels.env;
+            default: return this.channels.sfx;
+        }
     }
 
     public stop(id: string): void {
@@ -98,6 +112,36 @@ export class Sound {
             Sound._instance = new Sound();
         }
         return Sound._instance;
+    }
+}
+
+//like a channel on a mixer - volume control
+//just a wrapper for a gain node
+export class SoundChannel {
+    public output: GainNode;
+    constructor(private context: AudioContext, target: AudioNode) {
+        this.output = this.context.createGain()
+        this.output.connect(target)
+    }
+
+    public get volume(): number {
+        return this.output.gain.value
+    }
+
+    public set volume(value: number) {
+        this.output.gain.setValueAtTime(value, this.context.currentTime);
+    }
+
+    public add(sound: SoundPlay): void {
+        sound.output.connect(this.output);
+    }
+
+    public connect(node: AudioNode): void {
+        this.output.connect(node)
+    }
+
+    public disconnect(node: AudioNode): void {
+        this.output.disconnect(node)
     }
 }
 
