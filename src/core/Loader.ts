@@ -100,7 +100,8 @@ export class Loader {
 
         const resourceKey = Object.keys(resources).find(key => {
             const resource: LoaderResource = resources[key]
-            return resource.name === jsonName && resource.url === jsonURL;
+            //don't check the name - the name is the id so can be different to file name
+            return resource.url === jsonURL;
         })
         if (resourceKey) {
             const resource: LoaderResource = resources[resourceKey];
