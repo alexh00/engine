@@ -91,8 +91,9 @@ export class Loader {
         const path = audioSrc.substring(0, slashIndex)
 
         const dotIndex = fname.lastIndexOf('.')
+
         //whats the file name we are looking for?
-        const jsonName = fname.substring(0, dotIndex) + '.json'
+        const jsonName = dotIndex > -1? fname.substring(0, dotIndex) + '.json' : fname + '.json'
 
         //whats the url we are looking for?
         const jsonURL = path + jsonName;
