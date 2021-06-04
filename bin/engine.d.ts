@@ -27,12 +27,14 @@ declare module 'engine' {
 
 declare module 'engine/core/Loader' {
     import { IAsset, Settings } from "engine/core/Settings";
-    import { ISoundData } from "engine/audio/Sound";
+    import { ISoundData, ISpriteData } from "engine/audio/Sound";
     export class Loader {
         static GLOBAL_ASSETS_LOADED: string;
+        audioFormat: string;
         constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
         loadGlobal(): void;
         fetchSounds(): ISoundData[];
+        getAudioSpriteData(assetData: IAsset): ISpriteData;
         loadAssets(assets: IAsset[], load?: boolean): void;
         loadScreen(screenId: string): void;
     }
@@ -56,6 +58,9 @@ declare module 'engine/core/Settings' {
     export interface IAsset {
         id: string;
         src: string;
+        audio?: boolean;
+        loop?: number;
+        group?: string;
     }
     export interface ISize {
         width: number;
@@ -115,6 +120,17 @@ declare module 'engine/audio/Sound' {
         group?: string;
         url?: string;
         extension?: string;
+        sprites?: ISpriteInfo[];
+    }
+    export interface ISpriteData {
+        id: string;
+        src: string;
+        sprites: ISpriteInfo[];
+    }
+    export interface ISpriteInfo {
+        id: string;
+        start: number;
+        duration: number;
     }
     export interface IBuffers {
         [id: string]: ISoundData;
@@ -125,7 +141,17 @@ declare module 'engine/audio/Sound' {
         stop(id: string): void;
         addSounds(sounds: ISoundData[]): void;
         add: (sound: ISoundData) => void;
+        get scratchBuffer(): AudioBuffer;
         static get instance(): Sound;
+    }
+    export class SoundChannel {
+        output: GainNode;
+        constructor(context: AudioContext, target: AudioNode);
+        get volume(): number;
+        set volume(value: number);
+        add(sound: SoundPlay): void;
+        connect(node: AudioNode): void;
+        disconnect(node: AudioNode): void;
     }
     export class SoundPlay {
         soundData: ISoundData;
@@ -133,6 +159,10 @@ declare module 'engine/audio/Sound' {
         output: GainNode;
         constructor(soundData: ISoundData, context: AudioContext);
         play(): void;
+        stop(): void;
+        get volume(): number;
+        set volume(value: number);
+        get time(): number;
         dispose(): void;
     }
 }

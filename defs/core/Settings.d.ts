@@ -1,6 +1,9 @@
 export interface IAsset {
     id: string;
     src: string;
+    audio?: boolean;
+    loop?: number;
+    group?: string;
 }
 export interface ISize {
     width: number;
