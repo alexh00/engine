@@ -161,6 +161,8 @@ declare module 'engine/audio/Sound' {
         output: GainNode;
         constructor(soundData: ISoundData, context: AudioContext);
         play(): void;
+        get start(): number;
+        get duration(): number;
         stop(): void;
         get volume(): number;
         set volume(value: number);

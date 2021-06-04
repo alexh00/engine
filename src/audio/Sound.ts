@@ -193,12 +193,30 @@ export class SoundPlay {
         this.source.buffer = <AudioBuffer>this.soundData.buffer;
         //volume controller
         this.output = this.context.createGain();
+        //TODO - set the volume
         this.source.connect(this.output);//this step is important ;)
     }
 
     public play(): void {
-        //TODO - loop, start time, duration, etc
-        this.source.start()
+        // - loop, start time, duration, etc
+        // this.source.start()
+        if (this.duration > -1) {
+            this.source.start(0, this.start, this.duration);
+        } else {
+            this.source.start(0, this.start);
+        }
+    }
+
+    public get start(): number {
+        return this.soundData.start || 0;
+    }
+
+    public get duration(): number {
+        if (this.soundData.loop) {
+            //TODO
+        } else {
+            return this.soundData.duration || -1;
+        }
     }
 
     public stop(): void {

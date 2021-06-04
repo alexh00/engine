@@ -59,6 +59,8 @@ export declare class SoundPlay {
     private startTime;
     constructor(soundData: ISoundData, context: AudioContext);
     play(): void;
+    get start(): number;
+    get duration(): number;
     stop(): void;
     get volume(): number;
     set volume(value: number);
