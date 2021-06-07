@@ -14,12 +14,15 @@ export class Unloader {
         assets && assets.forEach((asset: IAsset) => {
             // - remove from loader
             this._loader.unload(asset)
+
             // - remove from texture cache
-            delete PIXI.utils.TextureCache[asset.id]
-            delete PIXI.utils.TextureCache[asset.src]
-            // - remove from BaseTextureCache
-            delete PIXI.utils.BaseTextureCache[asset.id]
-            delete PIXI.utils.BaseTextureCache[asset.src]
+            const tx = PIXI.utils.TextureCache[asset.id];
+            if (tx) {
+                const baseTexture = tx.baseTexture;
+                PIXI.utils.TextureCache.removeFromCache(tx)
+                PIXI.utils.BaseTextureCache.removeFromCache(baseTexture)   
+            }
+            
             // - remove from sound engine
             Sound.instance.remove(asset.id)
         })
