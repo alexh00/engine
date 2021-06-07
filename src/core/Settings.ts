@@ -14,10 +14,7 @@ export interface ISize {
 }
 
 export interface IAssets {
-    global: IAsset[];
-    scene: {
-        [sceneId: string]: IAsset[];
-    }
+    [id: string]: IAsset[];
 }
 
 export interface IConfig {

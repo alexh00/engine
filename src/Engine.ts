@@ -47,7 +47,7 @@ export class Engine {
         this.app.renderer.resize(this.settings.size.width, this.settings.size.height)
 
         //create the loader
-        this.loader = new Loader(this.app.loader, this.events, this.settings)
+        this.loader = new Loader(this.app.loader)
 
         //create update loop
         this.updateLoop = this._createUpdateLoop()
@@ -82,14 +82,14 @@ export class Engine {
             //set screenmap
             this.screenManager.screenMap = screenMap;
             //load global assets
-            this.loader.loadGlobal();
+            this.loader.loadAssets(this.settings.getManifest())
+                .then(() => {
+                    Sound.instance.addSounds(this.loader.fetchSounds())
+                    //now show first screen
+                    events.emit(EngineEvents.APP_READY)
+                })
         })
 
-        events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
-            Sound.instance.addSounds(this.loader.fetchSounds())
-            //now show first screen
-            events.emit(EngineEvents.APP_READY)
-        })
         return events;
     }
 

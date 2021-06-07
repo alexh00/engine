@@ -20,9 +20,7 @@ export class Loader {
     private _assetData: IAssetDataMap = {};
 
     constructor(
-        private _loader: PIXI.Loader,
-        private _events: PIXI.utils.EventEmitter,
-        private _settings: Settings
+        private _loader: PIXI.Loader
     ) {
         this._setResourceTypes();
     }
@@ -43,14 +41,6 @@ export class Loader {
     private setXhr(extension: string): void {
         LoaderResource.setExtensionLoadType(extension, LoaderResource.LOAD_TYPE.XHR)
         LoaderResource.setExtensionXhrType(extension, LoaderResource.XHR_RESPONSE_TYPE.BUFFER)
-    }
-
-    public loadGlobal(): void {
-        //load items from the global list
-        this.loadAssets(this._settings.getManifest()).then(() => {
-            console.log('global assets loaded')
-            this._events.emit(Loader.GLOBAL_ASSETS_LOADED)
-        })
     }
 
     public fetchSounds(): ISoundData[] {
@@ -129,7 +119,4 @@ export class Loader {
         
     }
 
-    public loadScreen(screenId: string): void {
-        //TODO
-    }
 }
