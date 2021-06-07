@@ -3,6 +3,7 @@ import { EventQueue } from "../utils";
 import { Screen } from "./Screen";
 import { ISize, Settings } from "./Settings";
 import { Loader } from "./Loader";
+import { Unloader } from "./Unloader";
 
 export interface IScreenMap {
     [id: string]: typeof Screen
@@ -22,7 +23,8 @@ export class ScreenManager {
     constructor(
         private _events: EventQueue,
         private _settings: Settings,
-        private _loader: Loader
+        private _loader: Loader,
+        private _unloader: Unloader
     ) {
         
         this._size = this._settings.size;
@@ -53,13 +55,14 @@ export class ScreenManager {
         if (!this._screenMap.hasOwnProperty(id)) {
             console.error('Screen type not found', id)
         }
+        
+        // - Unload first if necessary too
+        if (this.currentScreen) {
+            const assetsToUnLoad = this._settings.assets[this.currentScreen.id];
+            this._unloader.unload(assetsToUnLoad)  
+        }
+        
         const ScreenType = this._screenMap[id];
-
-        //TODO - UNload first if necessary too
-        //would be nice to use async await here...
-
-
-
         // - preload first if necessary
         const assetsToLoad = this._settings.assets[id];
         if (assetsToLoad) {

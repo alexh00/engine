@@ -10,10 +10,7 @@ export interface ISize {
     height: number;
 }
 export interface IAssets {
-    global: IAsset[];
-    scene: {
-        [sceneId: string]: IAsset[];
-    };
+    [id: string]: IAsset[];
 }
 export interface IConfig {
     assets: IAssets;

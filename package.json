@@ -1,6 +1,6 @@
 {
   "name": "engine",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "A Typescript based engine for working with pixi.js",
   "main": "engine.js",
   "repository": {

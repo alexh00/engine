@@ -130,6 +130,10 @@ export class Sound {
         })
     }
 
+    public remove(id: string): void {
+        //find the main sound then remove all with that buffer
+    }
+
     private _cloneData(soundData: ISoundData): ISoundData {
         const { id, buffer, group, extension, url } = soundData;
         return { id, buffer, group, extension, url }

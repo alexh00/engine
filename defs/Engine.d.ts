@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Loader } from './core/Loader';
 import { IScreenMap, ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings';
+import { Unloader } from './core/Unloader';
 import { EventQueue, UpdateLoop } from './utils';
 export declare class Engine {
     app: PIXI.Application;
@@ -9,6 +10,7 @@ export declare class Engine {
     events: EventQueue;
     updateLoop: UpdateLoop;
     loader: Loader;
+    unloader: Unloader;
     screenManager: ScreenManager;
     constructor();
     start(screenMap: IScreenMap): Engine;

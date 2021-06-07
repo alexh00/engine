@@ -4,6 +4,7 @@ import { EngineEvents } from './core/EngineEvents';
 import { Loader } from './core/Loader';
 import { IScreenMap, ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
+import { Unloader } from './core/Unloader';
 import { version } from './core/version';
 import { TweenManager } from './tween';
 import { EventQueue, UpdateLoop } from './utils';
@@ -19,6 +20,8 @@ export class Engine {
     public updateLoop: UpdateLoop;
 
     public loader: Loader;
+
+    public unloader: Unloader;
 
     public screenManager: ScreenManager;
 
@@ -49,6 +52,8 @@ export class Engine {
         //create the loader
         this.loader = new Loader(this.app.loader)
 
+        this.unloader = new Unloader(this.loader)
+
         //create update loop
         this.updateLoop = this._createUpdateLoop()
 
@@ -67,7 +72,7 @@ export class Engine {
     }
 
     private _createScreenManager(): ScreenManager {
-        const screenManager = new ScreenManager(this.events, this.settings, this.loader)
+        const screenManager = new ScreenManager(this.events, this.settings, this.loader, this.unloader)
         this.app.stage.addChild(screenManager.root)
         this.updateLoop.add(screenManager)
         return screenManager;

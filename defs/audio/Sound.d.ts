@@ -36,6 +36,7 @@ export declare class Sound {
     stop(id: string): void;
     addSounds(sounds: ISoundData[]): void;
     add: (soundData: ISoundData) => void;
+    remove(id: string): void;
     private _cloneData;
     get scratchBuffer(): AudioBuffer;
     private static _instance;

@@ -119,4 +119,9 @@ export class Loader {
         
     }
 
+    public unload(asset: IAsset): void {
+        delete this._assetData[asset.id];
+        delete this._loader.resources[asset.id];
+    }
+
 }

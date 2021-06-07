@@ -7,6 +7,7 @@ declare module 'engine' {
     import { Loader } from 'engine/core/Loader';
     import { IScreenMap, ScreenManager } from 'engine/core/ScreenManager';
     import { Settings } from 'engine/core/Settings';
+    import { Unloader } from 'engine/core/Unloader';
     import { EventQueue, UpdateLoop } from 'engine/utils';
     export class Engine {
         app: PIXI.Application;
@@ -14,6 +15,7 @@ declare module 'engine' {
         events: EventQueue;
         updateLoop: UpdateLoop;
         loader: Loader;
+        unloader: Unloader;
         screenManager: ScreenManager;
         constructor();
         start(screenMap: IScreenMap): Engine;
@@ -26,17 +28,16 @@ declare module 'engine' {
 }
 
 declare module 'engine/core/Loader' {
-    import { IAsset, Settings } from "engine/core/Settings";
+    import { IAsset } from "engine/core/Settings";
     import { ISoundData, ISpriteData } from "engine/audio/Sound";
     export class Loader {
         static GLOBAL_ASSETS_LOADED: string;
         audioFormat: string;
-        constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter, _settings: Settings);
-        loadGlobal(): void;
+        constructor(_loader: PIXI.Loader);
         fetchSounds(): ISoundData[];
         getAudioSpriteData(assetData: IAsset): ISpriteData;
         loadAssets(assets: IAsset[], load?: boolean): Promise<void>;
-        loadScreen(screenId: string): void;
+        unload(asset: IAsset): void;
     }
 }
 
@@ -45,13 +46,14 @@ declare module 'engine/core/ScreenManager' {
     import { Screen } from "engine/core/Screen";
     import { Settings } from "engine/core/Settings";
     import { Loader } from "engine/core/Loader";
+    import { Unloader } from "engine/core/Unloader";
     export interface IScreenMap {
         [id: string]: typeof Screen;
     }
     export class ScreenManager {
         root: PIXI.Container;
         currentScreen: Screen;
-        constructor(_events: EventQueue, _settings: Settings, _loader: Loader);
+        constructor(_events: EventQueue, _settings: Settings, _loader: Loader, _unloader: Unloader);
         set screenMap(map: IScreenMap);
         update(delta: number): void;
         showScreen: (id: string) => void;
@@ -73,10 +75,7 @@ declare module 'engine/core/Settings' {
         height: number;
     }
     export interface IAssets {
-        global: IAsset[];
-        scene: {
-            [sceneId: string]: IAsset[];
-        };
+        [id: string]: IAsset[];
     }
     export interface IConfig {
         assets: IAssets;
@@ -90,6 +89,15 @@ declare module 'engine/core/Settings' {
         constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter);
         getManifest(key?: string): IAsset[];
         load(): Settings;
+    }
+}
+
+declare module 'engine/core/Unloader' {
+    import { Loader } from "engine/core/Loader";
+    import { IAsset } from "engine/core/Settings";
+    export class Unloader {
+        constructor(_loader: Loader);
+        unload(assets: IAsset[]): void;
     }
 }
 
@@ -151,6 +159,7 @@ declare module 'engine/audio/Sound' {
         stop(id: string): void;
         addSounds(sounds: ISoundData[]): void;
         add: (soundData: ISoundData) => void;
+        remove(id: string): void;
         get scratchBuffer(): AudioBuffer;
         static get instance(): Sound;
     }
