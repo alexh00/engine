@@ -11,7 +11,7 @@ export class Unloader {
 
     public unload(assets: IAsset[]) {
 
-        assets.forEach((asset: IAsset) => {
+        assets && assets.forEach((asset: IAsset) => {
             // - remove from loader
             this._loader.unload(asset)
             // - remove from texture cache
