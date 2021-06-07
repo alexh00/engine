@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Loader } from './core/Loader';
-import { ScreenManager } from './core/ScreenManager';
+import { IScreenMap, ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings';
 import { EventQueue, UpdateLoop } from './utils';
 export declare class Engine {
@@ -11,7 +11,7 @@ export declare class Engine {
     loader: Loader;
     screenManager: ScreenManager;
     constructor();
-    start(): Engine;
+    start(screenMap: IScreenMap): Engine;
     getResource(id: string): unknown;
     private build;
     private _createUpdateLoop;

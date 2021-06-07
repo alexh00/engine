@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Sound } from './audio/Sound';
 import { EngineEvents } from './core/EngineEvents';
 import { Loader } from './core/Loader';
-import { ScreenManager } from './core/ScreenManager';
+import { IScreenMap, ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
 import { version } from './core/version';
 import { TweenManager } from './tween';
@@ -26,12 +26,12 @@ export class Engine {
         console.log('Engine version', version.code)
     }
 
-    public start(): Engine {
+    public start(screenMap: IScreenMap): Engine {
         //probably want to use the pixi loader for everything...
         //so create the app straight away
         this.app = this._createPixiApp()
 
-        this.events = this._createEvents();
+        this.events = this._createEvents(screenMap);
         //load the config
         this.settings = new Settings(this.app.loader, this.events);
         return this;
@@ -73,12 +73,14 @@ export class Engine {
         return screenManager;
     }   
 
-    private _createEvents(): EventQueue {
+    private _createEvents(screenMap: IScreenMap): EventQueue {
         const events = new EventQueue();
 
         events.on(Settings.CONFIG_LOADED, () => {
             //config is loaded - now build the engine
             this.build();
+            //set screenmap
+            this.screenManager.screenMap = screenMap;
             //load global assets
             this.loader.loadGlobal();
         })

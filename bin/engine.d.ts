@@ -5,7 +5,7 @@
 declare module 'engine' {
     import * as PIXI from 'pixi.js';
     import { Loader } from 'engine/core/Loader';
-    import { ScreenManager } from 'engine/core/ScreenManager';
+    import { IScreenMap, ScreenManager } from 'engine/core/ScreenManager';
     import { Settings } from 'engine/core/Settings';
     import { EventQueue, UpdateLoop } from 'engine/utils';
     export class Engine {
@@ -16,7 +16,7 @@ declare module 'engine' {
         loader: Loader;
         screenManager: ScreenManager;
         constructor();
-        start(): Engine;
+        start(screenMap: IScreenMap): Engine;
         getResource(id: string): unknown;
     }
     export * from 'engine/core';
