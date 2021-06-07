@@ -16,8 +16,10 @@ export class Unloader {
             this._loader.unload(asset)
             // - remove from texture cache
             delete PIXI.utils.TextureCache[asset.id]
+            delete PIXI.utils.TextureCache[asset.src]
             // - remove from BaseTextureCache
             delete PIXI.utils.BaseTextureCache[asset.id]
+            delete PIXI.utils.BaseTextureCache[asset.src]
             // - remove from sound engine
             Sound.instance.remove(asset.id)
         })

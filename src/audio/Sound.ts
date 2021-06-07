@@ -130,8 +130,22 @@ export class Sound {
         })
     }
 
+    //unload sound
     public remove(id: string): void {
-        //find the main sound then remove all with that buffer
+        //find the main sound then remove all that reference that buffer
+        const mainData = this._buffers[id];
+        if (!mainData) {
+            console.error('Sound.remove - no sound found with id', id)
+        } else {
+            const buffer = mainData.buffer;
+            Object.keys(this._buffers).forEach(key => {
+                const soundData = this._buffers[key];
+                if (soundData.buffer === buffer) {
+                    delete this._buffers[key]
+                }
+            })
+        }
+        
     }
 
     private _cloneData(soundData: ISoundData): ISoundData {
