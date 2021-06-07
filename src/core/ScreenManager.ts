@@ -81,6 +81,7 @@ export class ScreenManager {
         const screen = <Screen>new ScreenType({
             screenWidth: this._size.width,
             screenHeight: this._size.height,
+            screenEvents: this._events,
             id
         });
         this.root.addChild(screen);

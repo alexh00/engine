@@ -1,9 +1,11 @@
+import { EventQueue } from "../utils";
 import { Timeout } from "../utils/Timeout";
 import { UpdateList } from "../utils/UpdateList";
 
 export interface IScreenConfig {
     screenWidth: number,
     screenHeight: number,
+    screenEvents: EventQueue,//for changing screens
     id?:string
 }
 
