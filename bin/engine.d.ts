@@ -204,6 +204,7 @@ declare module 'engine/core/Screen' {
         id: string;
         protected screenWidth: number;
         protected screenHeight: number;
+        protected screenEvents: EventQueue;
         constructor(config: IScreenConfig);
         update(delta: number): void;
         dispose(): void;

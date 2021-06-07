@@ -18,6 +18,7 @@ export class Screen extends PIXI.Container {
 
     protected screenWidth:number;
     protected screenHeight: number;
+    protected screenEvents: EventQueue;
 
     constructor(config: IScreenConfig) {
         super();

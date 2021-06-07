@@ -1,2 +1,2 @@
-const version = { code: '0.1.23' }
+const version = { code: '0.1.24' }
     export {version}
