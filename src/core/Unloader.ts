@@ -18,9 +18,7 @@ export class Unloader {
             // - remove from texture cache
             const tx = PIXI.utils.TextureCache[asset.id];
             if (tx) {
-                const baseTexture = tx.baseTexture;
-                PIXI.utils.TextureCache.removeFromCache(tx)
-                PIXI.utils.BaseTextureCache.removeFromCache(baseTexture)   
+                tx.destroy();
             }
             
             // - remove from sound engine
