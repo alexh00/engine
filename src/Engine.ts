@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Sound } from './audio/Sound';
+import { EngineEvents } from './core/EngineEvents';
 import { Loader } from './core/Loader';
 import { ScreenManager } from './core/ScreenManager';
 import { Settings } from './core/Settings'
@@ -57,7 +58,6 @@ export class Engine {
         //create screen manager
         this.screenManager = this._createScreenManager();
 
-        //create sound manager (rewrite it)
     }
 
     private _createUpdateLoop(): UpdateLoop {
@@ -67,7 +67,7 @@ export class Engine {
     }
 
     private _createScreenManager(): ScreenManager {
-        const screenManager = new ScreenManager(this.events, this.settings.size)
+        const screenManager = new ScreenManager(this.events, this.settings, this.loader)
         this.app.stage.addChild(screenManager.root)
         this.updateLoop.add(screenManager)
         return screenManager;
@@ -86,7 +86,7 @@ export class Engine {
         events.on(Loader.GLOBAL_ASSETS_LOADED, () => {
             Sound.instance.addSounds(this.loader.fetchSounds())
             //now show first screen
-            events.emit('app-ready')
+            events.emit(EngineEvents.APP_READY)
         })
         return events;
     }

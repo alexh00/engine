@@ -15,6 +15,6 @@ export declare class Loader {
     loadGlobal(): void;
     fetchSounds(): ISoundData[];
     getAudioSpriteData(assetData: IAsset): ISpriteData;
-    loadAssets(assets: IAsset[], load?: boolean): void;
+    loadAssets(assets: IAsset[], load?: boolean): Promise<void>;
     loadScreen(screenId: string): void;
 }

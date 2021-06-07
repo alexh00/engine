@@ -38,6 +38,13 @@ export class Settings implements IConfig {
         this.load();
     }
 
+    public getManifest(key?: string): IAsset[] {
+        if (!key) {
+            key = 'global'
+        }
+        return this.assets[key];
+    }
+
     public load(): Settings {
         this._loader.add('config', this.configPath);
         this._loader.onComplete.once(this._configLoaded)
@@ -50,4 +57,5 @@ export class Settings implements IConfig {
         Object.assign(this, config)
         this._events.emit(Settings.CONFIG_LOADED)
     }
+
 }

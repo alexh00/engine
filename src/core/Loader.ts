@@ -47,8 +47,7 @@ export class Loader {
 
     public loadGlobal(): void {
         //load items from the global list
-        this.loadAssets(this._settings.assets.global)
-        this._loader.onComplete.once(() => {
+        this.loadAssets(this._settings.getManifest()).then(() => {
             console.log('global assets loaded')
             this._events.emit(Loader.GLOBAL_ASSETS_LOADED)
         })
@@ -110,20 +109,24 @@ export class Loader {
         return null;
     }
 
-    public loadAssets(assets: IAsset[], load = true): void {
-        assets.forEach(asset => {
-            //TODO - pass through more information eg sound groups?
-
-            //store the data by id for later lookup after loading
-            //wait this won't work, what if file and json have the same id...
-            this._assetData[asset.id] = asset;
-
-            const src = asset.audio ? asset.src + this.audioFormat : asset.src;
-            this._loader.add(asset.id, src)
+    public loadAssets(assets: IAsset[], load = true): Promise<void> {    
+        return new Promise((resolve) => {
+            assets.forEach(asset => {
+                //TODO - pass through more information eg sound groups?
+    
+                //store the data by id for later lookup after loading
+                //wait this won't work, what if file and json have the same id...
+                this._assetData[asset.id] = asset;
+    
+                const src = asset.audio ? asset.src + this.audioFormat : asset.src;
+                this._loader.add(asset.id, src)
+            })
+            if (load) {
+                this._loader.onComplete.once(resolve)
+                this._loader.load();
+            }
         })
-        if (load) {
-            this._loader.load();
-        }
+        
     }
 
     public loadScreen(screenId: string): void {

@@ -27,6 +27,7 @@ export declare class Settings implements IConfig {
     assets: IAssets;
     size: ISize;
     constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter);
+    getManifest(key?: string): IAsset[];
     load(): Settings;
     private _configLoaded;
 }

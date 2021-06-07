@@ -1,13 +1,32 @@
+import { EngineEvents } from "./EngineEvents";
+import { EventQueue } from "../utils";
 import { Screen } from "./Screen";
-import { ISize } from "./Settings";
+import { ISize, Settings } from "./Settings";
+import { Loader } from "./Loader";
+
+export interface IScreenMap {
+    [id: string]: typeof Screen
+}
+
 
 export class ScreenManager {
 
     public root: PIXI.Container;
 
+    private _size: ISize;
+
     public currentScreen: Screen;
 
-    constructor(private _events: PIXI.utils.EventEmitter, private _size: ISize) {
+    private _screenMap: IScreenMap
+
+    constructor(
+        private _events: EventQueue,
+        private _settings: Settings,
+        private _loader: Loader
+    ) {
+        
+        this._size = this._settings.size;
+        
         this.root = new PIXI.Container();
 
         this.root.position.set(
@@ -15,9 +34,13 @@ export class ScreenManager {
             this._size.height / 2
         )
 
-        //TODO - make this work via queued events actually
-        this._events.on('screen', this.showScreen)
+        this._events.on(EngineEvents.SHOW_SCREEN, this.showScreen)
     }
+
+    public set screenMap(map: IScreenMap) {
+        this._screenMap = map;
+    }
+
 
     public update(delta: number): void {
         if (this.currentScreen) {
@@ -25,16 +48,37 @@ export class ScreenManager {
         }
     }
 
-    public showScreen = (ScreenType): void => {
-        this.disposeScreen();
+    public showScreen = (id: string): void => {
+        // - validate id
+        if (!this._screenMap.hasOwnProperty(id)) {
+            console.error('Screen type not found', id)
+        }
+        const ScreenType = this._screenMap[id];
+
+        //TODO - UNload first if necessary too
+        //would be nice to use async await here...
+
+
+
+        // - preload first if necessary
+        const assetsToLoad = this._settings.assets[id];
+        if (assetsToLoad) {
+            this._loader.loadAssets(assetsToLoad).then(() => {
+                this.disposeScreen();   
+                this.currentScreen = this._createScreen(ScreenType, id)
+            })
+        } else {
+            this.disposeScreen();   
+            this.currentScreen = this._createScreen(ScreenType, id)
+        }
         
-        this.currentScreen = this._createScreen(ScreenType)
     }
 
-    private _createScreen(ScreenType): Screen {
+    private _createScreen(ScreenType: typeof Screen, id: string): Screen {
         const screen = <Screen>new ScreenType({
             screenWidth: this._size.width,
-            screenHeight: this._size.height
+            screenHeight: this._size.height,
+            id
         });
         this.root.addChild(screen);
         return screen;

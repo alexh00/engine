@@ -35,20 +35,26 @@ declare module 'engine/core/Loader' {
         loadGlobal(): void;
         fetchSounds(): ISoundData[];
         getAudioSpriteData(assetData: IAsset): ISpriteData;
-        loadAssets(assets: IAsset[], load?: boolean): void;
+        loadAssets(assets: IAsset[], load?: boolean): Promise<void>;
         loadScreen(screenId: string): void;
     }
 }
 
 declare module 'engine/core/ScreenManager' {
+    import { EventQueue } from "engine/utils";
     import { Screen } from "engine/core/Screen";
-    import { ISize } from "engine/core/Settings";
+    import { Settings } from "engine/core/Settings";
+    import { Loader } from "engine/core/Loader";
+    export interface IScreenMap {
+        [id: string]: typeof Screen;
+    }
     export class ScreenManager {
         root: PIXI.Container;
         currentScreen: Screen;
-        constructor(_events: PIXI.utils.EventEmitter, _size: ISize);
+        constructor(_events: EventQueue, _settings: Settings, _loader: Loader);
+        set screenMap(map: IScreenMap);
         update(delta: number): void;
-        showScreen: (ScreenType: any) => void;
+        showScreen: (id: string) => void;
         resize(): void;
         disposeScreen(): void;
     }
@@ -82,6 +88,7 @@ declare module 'engine/core/Settings' {
         assets: IAssets;
         size: ISize;
         constructor(_loader: PIXI.Loader, _events: PIXI.utils.EventEmitter);
+        getManifest(key?: string): IAsset[];
         load(): Settings;
     }
 }
@@ -100,6 +107,7 @@ declare module 'engine/core' {
     export * from 'engine/core/ScreenManager';
     export * from 'engine/core/Settings';
     export * from 'engine/core/version';
+    export * from 'engine/core/EngineEvents';
 }
 
 declare module 'engine/tween' {
@@ -177,10 +185,12 @@ declare module 'engine/core/Screen' {
     export interface IScreenConfig {
         screenWidth: number;
         screenHeight: number;
+        id?: string;
     }
     export class Screen extends PIXI.Container {
         updateList: UpdateList;
         timeout: Timeout;
+        id: string;
         protected screenWidth: number;
         protected screenHeight: number;
         constructor(config: IScreenConfig);
@@ -262,6 +272,13 @@ declare module 'engine/core/version' {
         code: string;
     };
     export { version };
+}
+
+declare module 'engine/core/EngineEvents' {
+    export enum EngineEvents {
+        APP_READY = "app-ready",
+        SHOW_SCREEN = "screen"
+    }
 }
 
 declare module 'engine/tween/Easing' {

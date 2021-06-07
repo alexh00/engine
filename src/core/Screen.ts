@@ -3,13 +3,16 @@ import { UpdateList } from "../utils/UpdateList";
 
 export interface IScreenConfig {
     screenWidth: number,
-    screenHeight: number
+    screenHeight: number,
+    id?:string
 }
 
 export class Screen extends PIXI.Container {
 
     public updateList: UpdateList;
     public timeout: Timeout;
+
+    public id: string;
 
     protected screenWidth:number;
     protected screenHeight: number;
